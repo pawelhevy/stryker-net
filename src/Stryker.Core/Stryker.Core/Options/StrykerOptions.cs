@@ -19,6 +19,7 @@ namespace Stryker.Core.Options
         public string ReportFileName { get; init; }
         public string SolutionPath { get; init; }
         public string TargetFramework { get; init; }
+        public bool NoBuild { get; init; }
 
         public LogOptions LogOptions { get; init; }
         public MutationLevel MutationLevel { get; init; }
@@ -127,7 +128,8 @@ namespace Stryker.Core.Options
             TestProjects = testProjects,
             TestCaseFilter = TestCaseFilter,
             Thresholds = Thresholds,
-            WithBaseline = WithBaseline
+            WithBaseline = WithBaseline,
+            NoBuild = NoBuild,
         };
     }
 }

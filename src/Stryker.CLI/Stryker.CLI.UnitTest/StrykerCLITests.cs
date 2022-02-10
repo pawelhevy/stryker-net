@@ -438,5 +438,14 @@ Options:";
 
             _inputs.AzureFileStorageSasInput.SuppliedInput.ShouldBe("sas");
         }
+
+        [Theory]
+        [InlineData("--no-build")]
+        public void ShouldSetNoBuildWhenPassed(string argName)
+        {
+            _target.Run(new string[] { argName });
+
+            _inputs.NoBuildInput.SuppliedInput.ShouldBe(true);
+        }
     }
 }

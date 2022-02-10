@@ -51,7 +51,7 @@ namespace Stryker.Core.Initialisation
             }
 
             _logger.LogDebug("Analyzing project file {0}", projectFilePath);
-            var analyzerResults = _manager.GetProject(projectFilePath).Build();
+            var analyzerResults = _manager.GetProject(projectFilePath).Build(); //TODO this will remove builded projects
             var analyzerResult = SelectAnalyzerResult(analyzerResults, targetFramework);
 
             LogAnalyzerResult(analyzerResult);

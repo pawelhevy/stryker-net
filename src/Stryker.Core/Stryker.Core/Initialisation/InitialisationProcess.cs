@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Buildalyzer;
 using Microsoft.Extensions.Logging;
 using Mono.Cecil;
 using Stryker.Core.Baseline.Providers;
@@ -63,21 +65,7 @@ namespace Stryker.Core.Initialisation
             // resolve project info
             var projectInfo = _inputFileResolver.ResolveInput(options);
 
-            // initial build
-            var testProjects = projectInfo.TestProjectAnalyzerResults.ToList();
-            for (var i = 0; i < testProjects.Count; i++)
-            {
-                _logger.LogInformation(
-                    "Building test project {ProjectFilePath} ({CurrentTestProject}/{OfTotalTestProjects})",
-                    testProjects[i].ProjectFilePath, i + 1,
-                    projectInfo.TestProjectAnalyzerResults.Count());
-
-                _initialBuildProcess.InitialBuild(
-                    testProjects[i].GetTargetFramework() == Framework.DotNetClassic,
-                    testProjects[i].ProjectFilePath,
-                    options.SolutionPath,
-                    options.MsBuildPath);
-            }
+            InitializeTestProjectsBuild(options, projectInfo);
 
             InitializeDashboardProjectInformation(options, projectInfo);
 
@@ -96,9 +84,39 @@ namespace Stryker.Core.Initialisation
             return input;
         }
 
+
         public InitialTestRun InitialTest(StrykerOptions options) =>
             // initial test
             _initialTestProcess.InitialTest(options, _testRunner);
+
+        private void InitializeTestProjectsBuild(StrykerOptions options, ProjectInfo projectInfo)
+        {
+            if (options.NoBuild)
+            {
+                _logger.LogWarning(
+                       "Tests projects will not be build when using {NoBuildOption}. Make sure they are builded before runing Stryker. Found {OfTotalTestProjects} test project",
+                       nameof(options.NoBuild),
+                       projectInfo.TestProjectAnalyzerResults.Count());
+            }
+            else
+            {
+                // initial build
+                var testProjects = projectInfo.TestProjectAnalyzerResults.ToList();
+                for (var i = 0; i < testProjects.Count; i++)
+                {
+                    _logger.LogInformation(
+                        "Building test project {ProjectFilePath} ({CurrentTestProject}/{OfTotalTestProjects})",
+                        testProjects[i].ProjectFilePath, i + 1,
+                        projectInfo.TestProjectAnalyzerResults.Count());
+
+                    _initialBuildProcess.InitialBuild(
+                        testProjects[i].GetTargetFramework() == Framework.DotNetClassic,
+                        testProjects[i].ProjectFilePath,
+                        options.SolutionPath,
+                        options.MsBuildPath);
+                }
+            }
+        }
 
         private void InitializeDashboardProjectInformation(StrykerOptions options, ProjectInfo projectInfo)
         {

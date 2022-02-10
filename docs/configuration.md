@@ -132,6 +132,14 @@ Config file: `"target-framework": "netcoreapp3.1"`
 
 If the project targets multiple frameworks, this way you can specify the particular framework to build against. If you specify a non-existent target, Stryker will build the project against a random one (or the only one if so).
 
+### `no-build` <`flag`>
+
+Default: `false`  
+Command line: `[--no-build]`  
+Config file: `N/A`
+
+Prevents to build the test project before running mutation tests. Make sure they are builded before running Stryker.
+
 ### `project-info.name` <`string`>
 
 Default: `null`  

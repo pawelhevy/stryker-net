@@ -123,6 +123,7 @@ namespace Stryker.CLI
             AddCliInput(inputs.SolutionInput, "solution", "s", argumentHint: "file-path", category: InputCategory.Build);
             AddCliInput(inputs.ProjectUnderTestNameInput, "project", "p", argumentHint: "project-name.csproj", category: InputCategory.Build);
             AddCliInput(inputs.MsBuildPathInput, "msbuild-path", null, category: InputCategory.Build);
+            AddCliInput(inputs.NoBuildInput, "no-build", null, optionType: CommandOptionType.NoValue, category: InputCategory.Build);
 
 
             AddCliInput(inputs.MutateInput, "mutate", "m", optionType: CommandOptionType.MultipleValue, argumentHint: "glob-pattern", category: InputCategory.Mutation);
